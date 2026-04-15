@@ -1,6 +1,6 @@
 package de.docestate.softwaretest;
 
-import de.docestate.softwaretest.property.persistence.PropertyRepository;
+import de.docestate.softwaretest.repos.PropertyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,74 +45,74 @@ class SoftwaretestApplicationTests {
     void propertyReadAndWriteTest() throws Exception {
         String requestBody = """
                 {
-                  "bezeichnung": "Haus Lengsdorf",
-                  "adresse": {
-                    "ort": "Bonn",
-                    "postleitzahl": "53127",
-                    "strasse": "Zur Marterkapelle",
-                    "hausnummer": "29"
+                  "name": "Haus Lengsdorf",
+                  "address": {
+                    "city": "Bonn",
+                    "postalCode": "53127",
+                    "street": "Zur Marterkapelle",
+                    "houseNumber": "29"
                   }
                 }
                 """;
 
-        mockMvc.perform(post("/api/immobilien")
+        mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.bezeichnung").value("Haus Lengsdorf"))
-                .andExpect(jsonPath("$.adresse.ort").value("Bonn"));
+                .andExpect(jsonPath("$.name").value("Haus Lengsdorf"))
+                .andExpect(jsonPath("$.address.city").value("Bonn"));
 
-        mockMvc.perform(get("/api/immobilien"))
+        mockMvc.perform(get("/api/properties"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].bezeichnung").value("Haus Lengsdorf"));
+                .andExpect(jsonPath("$[0].name").value("Haus Lengsdorf"));
     }
 
     @Test
     void propertyCanBeReadById() throws Exception {
         String requestBody = """
                 {
-                  "bezeichnung": "Stadtwohnung",
-                  "adresse": {
-                    "ort": "Berlin",
-                    "postleitzahl": "10117",
-                    "strasse": "Friedrichstrasse",
-                    "hausnummer": "100"
+                  "name": "Stadtwohnung",
+                  "address": {
+                    "city": "Berlin",
+                    "postalCode": "10117",
+                    "street": "Friedrichstrasse",
+                    "houseNumber": "100"
                   }
                 }
                 """;
 
-        mockMvc.perform(post("/api/immobilien")
+        mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated());
 
         Long id = propertyRepository.findAll().get(0).getId();
 
-        mockMvc.perform(get("/api/immobilien/" + id))
+        mockMvc.perform(get("/api/properties/" + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.bezeichnung").value("Stadtwohnung"))
-                .andExpect(jsonPath("$.adresse.ort").value("Berlin"));
+                .andExpect(jsonPath("$.name").value("Stadtwohnung"))
+                .andExpect(jsonPath("$.address.city").value("Berlin"));
     }
 
     @Test
     void propertyEditTest() throws Exception {
         String createBody = """
                 {
-                  "bezeichnung": "Altbau",
-                  "adresse": {
-                    "ort": "Hamburg",
-                    "postleitzahl": "20095",
-                    "strasse": "Musterweg",
-                    "hausnummer": "8"
+                  "name": "Altbau",
+                  "address": {
+                    "city": "Hamburg",
+                    "postalCode": "20095",
+                    "street": "Musterweg",
+                    "houseNumber": "8"
                   }
                 }
                 """;
 
-        mockMvc.perform(post("/api/immobilien")
+        mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
@@ -121,39 +121,39 @@ class SoftwaretestApplicationTests {
 
         String updateBody = """
                 {
-                  "bezeichnung": "Modernisierter Altbau",
-                  "adresse": {
-                    "ort": "Hamburg",
-                    "postleitzahl": "20095",
-                    "strasse": "Neuer Weg",
-                    "hausnummer": "9"
+                  "name": "Modernisierter Altbau",
+                  "address": {
+                    "city": "Hamburg",
+                    "postalCode": "20095",
+                    "street": "Neuer Weg",
+                    "houseNumber": "9"
                   }
                 }
                 """;
 
-        mockMvc.perform(put("/api/immobilien/" + id)
+        mockMvc.perform(put("/api/properties/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bezeichnung").value("Modernisierter Altbau"))
-                .andExpect(jsonPath("$.adresse.strasse").value("Neuer Weg"));
+                .andExpect(jsonPath("$.name").value("Modernisierter Altbau"))
+                .andExpect(jsonPath("$.address.street").value("Neuer Weg"));
     }
 
     @Test
     void propertyPartialEditTest() throws Exception {
         String createBody = """
                 {
-                  "bezeichnung": "Reihenhaus",
-                  "adresse": {
-                    "ort": "Köln",
-                    "postleitzahl": "50667",
-                    "strasse": "Domkloster",
-                    "hausnummer": "4"
+                  "name": "Reihenhaus",
+                  "address": {
+                    "city": "Koeln",
+                    "postalCode": "50667",
+                    "street": "Domkloster",
+                    "houseNumber": "4"
                   }
                 }
                 """;
 
-        mockMvc.perform(post("/api/immobilien")
+        mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
@@ -162,49 +162,72 @@ class SoftwaretestApplicationTests {
 
         String partialUpdateBody = """
                 {
-                  "adresse": {
-                    "strasse": "Trankgasse"
+                  "address": {
+                    "street": "Trankgasse"
                   }
                 }
                 """;
 
-        mockMvc.perform(put("/api/immobilien/" + id)
+        mockMvc.perform(put("/api/properties/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(partialUpdateBody))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bezeichnung").value("Reihenhaus"))
-                .andExpect(jsonPath("$.adresse.ort").value("Köln"))
-                .andExpect(jsonPath("$.adresse.postleitzahl").value("50667"))
-                .andExpect(jsonPath("$.adresse.strasse").value("Trankgasse"))
-                .andExpect(jsonPath("$.adresse.hausnummer").value("4"));
+                .andExpect(jsonPath("$.name").value("Reihenhaus"))
+                .andExpect(jsonPath("$.address.city").value("Koeln"))
+                .andExpect(jsonPath("$.address.postalCode").value("50667"))
+                .andExpect(jsonPath("$.address.street").value("Trankgasse"))
+                .andExpect(jsonPath("$.address.houseNumber").value("4"));
     }
 
     @Test
     void propertyDeleteTest() throws Exception {
         String createBody = """
                 {
-                  "bezeichnung": "Einfamilienhaus",
-                  "adresse": {
-                    "ort": "Leipzig",
-                    "postleitzahl": "04109",
-                    "strasse": "Ring",
-                    "hausnummer": "3"
+                  "name": "Einfamilienhaus",
+                  "address": {
+                    "city": "Leipzig",
+                    "postalCode": "04109",
+                    "street": "Ring",
+                    "houseNumber": "3"
                   }
                 }
                 """;
 
-        mockMvc.perform(post("/api/immobilien")
+        mockMvc.perform(post("/api/properties")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
 
         Long id = propertyRepository.findAll().get(0).getId();
 
-        mockMvc.perform(delete("/api/immobilien/" + id))
+        mockMvc.perform(delete("/api/properties/" + id))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/immobilien"))
+        mockMvc.perform(get("/api/properties"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void createFailsForInvalidPostalCode() throws Exception {
+        String requestBody = """
+                {
+                  "name": "Testobjekt",
+                  "address": {
+                    "city": "Bonn",
+                    "postalCode": "5312",
+                    "street": "Musterweg",
+                    "houseNumber": "29"
+                  }
+                }
+                """;
+
+        mockMvc.perform(post("/api/properties")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Postal code must contain exactly 5 digits."))
+                .andExpect(jsonPath("$.fieldErrors['address.postalCode']")
+                        .value("Postal code must contain exactly 5 digits."));
     }
 }

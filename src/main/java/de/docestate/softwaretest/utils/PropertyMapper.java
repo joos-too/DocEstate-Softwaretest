@@ -16,6 +16,10 @@ public final class PropertyMapper {
     public static Property toEntity(PropertyRequest request) {
         return Property.builder()
                 .name(request.name())
+                .objectType(request.objectType())
+                .constructionYear(request.constructionYear())
+                .lotSize(request.lotSize())
+                .livingSpace(request.livingSpace())
                 .address(toAddress(request.address()))
                 .build();
     }
@@ -46,6 +50,10 @@ public final class PropertyMapper {
         return new PropertyResponse(
                 property.getId(),
                 property.getName(),
+                property.getObjectType(),
+                property.getConstructionYear(),
+                property.getLotSize(),
+                property.getLivingSpace(),
                 new AddressResponse(
                         property.getAddress().getCity(),
                         property.getAddress().getPostalCode(),

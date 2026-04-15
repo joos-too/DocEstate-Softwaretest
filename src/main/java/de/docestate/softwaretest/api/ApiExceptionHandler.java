@@ -44,6 +44,9 @@ public class ApiExceptionHandler {
     private String toValidationMessage(String fieldName) {
         return switch (fieldName) {
             case "address.postalCode" -> "Postal code must contain exactly 5 digits.";
+            case "constructionYear" -> "Construction year must contain digits only.";
+            case "lotSize" -> "Lot size must be greater than 0.";
+            case "livingSpace" -> "Living space must be greater than 0.";
             default -> toDisplayFieldName(fieldName) + " is invalid.";
         };
     }
@@ -51,6 +54,10 @@ public class ApiExceptionHandler {
     private String toDisplayFieldName(String fieldName) {
         return switch (fieldName) {
             case "name" -> "Name";
+            case "objectType" -> "Object type";
+            case "constructionYear" -> "Construction year";
+            case "lotSize" -> "Lot size";
+            case "livingSpace" -> "Living space";
             case "address" -> "Address";
             case "address.city" -> "City";
             case "address.postalCode" -> "Postal code";

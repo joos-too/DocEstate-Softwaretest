@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Address {
 
-    @Column(name = "ort", nullable = false)
+    @Column(nullable = false)
     private String city;
 
-    @Column(name = "postleitzahl", nullable = false)
+    @Column(nullable = false)
     private String postalCode;
 
-    @Column(name = "strasse", nullable = false)
+    @Column(nullable = false)
     private String street;
 
-    @Column(name = "hausnummer", nullable = false)
+    @Column(nullable = false)
     private String houseNumber;
 }

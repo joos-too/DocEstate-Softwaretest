@@ -1,10 +1,22 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
-import type { PropertyFormValues, PropertyPayload } from '../types/property';
+import type { PropertyFormValues, PropertyPayload, PropertyType } from '../types/property';
+import { PROPERTY_TYPE_OPTIONS } from '../utils/propertyType';
 import { ErrorAlert } from './ErrorAlert';
 
 type FormMode = 'create' | 'edit';
 type FieldErrors = Partial<
-  Record<'name' | 'address.city' | 'address.postalCode' | 'address.street' | 'address.houseNumber', string>
+  Record<
+    | 'name'
+    | 'objectType'
+    | 'constructionYear'
+    | 'lotSize'
+    | 'livingSpace'
+    | 'address.city'
+    | 'address.postalCode'
+    | 'address.street'
+    | 'address.houseNumber',
+    string
+  >
 >;
 type TouchedFields = Partial<Record<keyof FieldErrors, boolean>>;
 
@@ -20,6 +32,12 @@ interface PropertyFormProps {
 }
 
 const POSTAL_CODE_PATTERN = /^\d{5}$/;
+const DIGITS_ONLY_PATTERN = /^\d+$/;
+const FLOAT_PATTERN = /^\d+(?:[.,]\d+)?$/;
+
+function parseFloatValue(value: string) {
+  return Number.parseFloat(value.replace(',', '.'));
+}
 
 function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyPayload {
   if (mode === 'edit') {
@@ -28,6 +46,22 @@ function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyP
 
     if (values.name.trim()) {
       payload.name = values.name.trim();
+    }
+
+    if (values.objectType) {
+      payload.objectType = values.objectType as PropertyType;
+    }
+
+    if (values.constructionYear.trim()) {
+      payload.constructionYear = values.constructionYear.trim();
+    }
+
+    if (values.lotSize.trim()) {
+      payload.lotSize = parseFloatValue(values.lotSize.trim());
+    }
+
+    if (values.livingSpace.trim()) {
+      payload.livingSpace = parseFloatValue(values.livingSpace.trim());
     }
 
     if (values.address.city.trim()) {
@@ -55,6 +89,10 @@ function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyP
 
   return {
     name: values.name.trim(),
+    objectType: values.objectType as PropertyType,
+    constructionYear: values.constructionYear.trim(),
+    lotSize: parseFloatValue(values.lotSize.trim()),
+    livingSpace: parseFloatValue(values.livingSpace.trim()),
     address: {
       city: values.address.city.trim(),
       postalCode: values.address.postalCode.trim(),
@@ -69,6 +107,39 @@ function validateValues(values: PropertyFormValues, mode: FormMode): FieldErrors
 
   if (mode === 'create' && !values.name.trim()) {
     errors.name = 'Bezeichnung ist erforderlich.';
+  }
+
+  if (mode === 'create' && !values.objectType) {
+    errors.objectType = 'Objekttyp ist erforderlich.';
+  }
+
+  const constructionYear = values.constructionYear.trim();
+  if (mode === 'create' && !constructionYear) {
+    errors.constructionYear = 'Baujahr ist erforderlich.';
+  } else if (constructionYear && !DIGITS_ONLY_PATTERN.test(constructionYear)) {
+    errors.constructionYear = 'Baujahr darf nur aus Ziffern bestehen.';
+  }
+
+  const lotSize = values.lotSize.trim();
+  if (mode === 'create' && !lotSize) {
+    errors.lotSize = 'Grundstücksfläche ist erforderlich.';
+  } else if (lotSize) {
+    if (!FLOAT_PATTERN.test(lotSize)) {
+      errors.lotSize = 'Grundstücksfläche muss eine Zahl sein.';
+    } else if (parseFloatValue(lotSize) <= 0) {
+      errors.lotSize = 'Grundstücksfläche muss größer als 0 sein.';
+    }
+  }
+
+  const livingSpace = values.livingSpace.trim();
+  if (mode === 'create' && !livingSpace) {
+    errors.livingSpace = 'Wohnfläche ist erforderlich.';
+  } else if (livingSpace) {
+    if (!FLOAT_PATTERN.test(livingSpace)) {
+      errors.livingSpace = 'Wohnfläche muss eine Zahl sein.';
+    } else if (parseFloatValue(livingSpace) <= 0) {
+      errors.livingSpace = 'Wohnfläche muss größer als 0 sein.';
+    }
   }
 
   if (mode === 'create' && !values.address.city.trim()) {
@@ -98,6 +169,10 @@ function getFormError(values: PropertyFormValues, mode: FormMode): string {
   if (mode === 'edit') {
     const hasAnyValue = [
       values.name,
+      values.objectType,
+      values.constructionYear,
+      values.lotSize,
+      values.livingSpace,
       values.address.city,
       values.address.postalCode,
       values.address.street,
@@ -105,7 +180,7 @@ function getFormError(values: PropertyFormValues, mode: FormMode): string {
     ].some((field) => Boolean(field.trim()));
 
     if (!hasAnyValue) {
-      return 'Bitte geben Sie mindestens ein Feld für die Aktualisierung an.';
+      return 'Bitte geben Sie mindestens ein Feld zur Aktualisierung an.';
     }
   }
 
@@ -165,7 +240,7 @@ export function PropertyForm({
   }
 
   function handleInputChange(path: keyof FieldErrors | 'name') {
-    return (event: ChangeEvent<HTMLInputElement>) => {
+    return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       updateField(path, event.target.value);
       setTouchedFields((current) => ({
         ...current,
@@ -235,11 +310,80 @@ export function PropertyForm({
             placeholder="z. B. Stadtwohnung"
           />
           {getFieldError('name') ? (
-            <span className="mt-2 block text-sm font-medium text-rose-700">
-              {getFieldError('name')}
-            </span>
+            <span className="mt-2 block text-sm font-medium text-rose-700">{getFieldError('name')}</span>
           ) : null}
         </label>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-stone-700">Objekttyp</span>
+            <select
+              value={values.objectType}
+              onChange={handleInputChange('objectType')}
+              className={getInputClassName('objectType')}
+            >
+              <option value="">Bitte wählen</option>
+              {PROPERTY_TYPE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {getFieldError('objectType') ? (
+              <span className="mt-2 block text-sm font-medium text-rose-700">
+                {getFieldError('objectType')}
+              </span>
+            ) : null}
+          </label>
+
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-stone-700">Baujahr</span>
+            <input
+              value={values.constructionYear}
+              onChange={handleInputChange('constructionYear')}
+              className={getInputClassName('constructionYear')}
+              placeholder="1998"
+              inputMode="numeric"
+            />
+            {getFieldError('constructionYear') ? (
+              <span className="mt-2 block text-sm font-medium text-rose-700">
+                {getFieldError('constructionYear')}
+              </span>
+            ) : null}
+          </label>
+
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-stone-700">
+              Grundstücksfläche (m²)
+            </span>
+            <input
+              value={values.lotSize}
+              onChange={handleInputChange('lotSize')}
+              className={getInputClassName('lotSize')}
+              placeholder="450.5"
+              inputMode="decimal"
+            />
+            {getFieldError('lotSize') ? (
+              <span className="mt-2 block text-sm font-medium text-rose-700">{getFieldError('lotSize')}</span>
+            ) : null}
+          </label>
+
+          <label className="block">
+            <span className="mb-2 block text-sm font-semibold text-stone-700">Wohnfläche (m²)</span>
+            <input
+              value={values.livingSpace}
+              onChange={handleInputChange('livingSpace')}
+              className={getInputClassName('livingSpace')}
+              placeholder="132.75"
+              inputMode="decimal"
+            />
+            {getFieldError('livingSpace') ? (
+              <span className="mt-2 block text-sm font-medium text-rose-700">
+                {getFieldError('livingSpace')}
+              </span>
+            ) : null}
+          </label>
+        </div>
 
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">

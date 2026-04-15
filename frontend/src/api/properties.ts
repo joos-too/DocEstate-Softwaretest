@@ -3,12 +3,16 @@ import type { ApiErrorPayload, Property, PropertyPayload } from '../types/proper
 const API_BASE = '/api/properties';
 
 const FIELD_ERROR_TRANSLATIONS: Record<string, string> = {
-  'address.postalCode': 'Postleitzahl muss genau 5 Ziffern haben.',
   name: 'Bezeichnung ist ungültig.',
+  objectType: 'Objekttyp ist ungültig.',
+  constructionYear: 'Baujahr darf nur aus Ziffern bestehen.',
+  lotSize: 'Grundstücksfläche muss größer als 0 sein.',
+  livingSpace: 'Wohnfläche muss größer als 0 sein.',
+  address: 'Adresse ist ungültig.',
   'address.city': 'Ort ist ungültig.',
+  'address.postalCode': 'Postleitzahl muss genau 5 Ziffern haben.',
   'address.street': 'Straße ist ungültig.',
-  'address.houseNumber': 'Hausnummer ist ungültig.',
-  address: 'Adresse ist ungültig.'
+  'address.houseNumber': 'Hausnummer ist ungültig.'
 };
 
 function localizeFieldErrors(fieldErrors?: Record<string, string>) {
@@ -37,11 +41,18 @@ function localizeMessage(message?: string) {
   return (
     {
       'Request is invalid.': 'Anfrage ist ungültig.',
-      'Postal code must contain exactly 5 digits.': 'Postleitzahl muss genau 5 Ziffern haben.',
       'Name is invalid.': 'Bezeichnung ist ungültig.',
+      'Object type is invalid.': 'Objekttyp ist ungültig.',
+      'Construction year is invalid.': 'Baujahr ist ungültig.',
+      'Construction year must contain digits only.': 'Baujahr darf nur aus Ziffern bestehen.',
+      'Lot size is invalid.': 'Grundstücksfläche ist ungültig.',
+      'Lot size must be greater than 0.': 'Grundstücksfläche muss größer als 0 sein.',
+      'Living space is invalid.': 'Wohnfläche ist ungültig.',
+      'Living space must be greater than 0.': 'Wohnfläche muss größer als 0 sein.',
       'Address is invalid.': 'Adresse ist ungültig.',
       'City is invalid.': 'Ort ist ungültig.',
       'Postal code is invalid.': 'Postleitzahl ist ungültig.',
+      'Postal code must contain exactly 5 digits.': 'Postleitzahl muss genau 5 Ziffern haben.',
       'Street is invalid.': 'Straße ist ungültig.',
       'House number is invalid.': 'Hausnummer ist ungültig.'
     }[message] ?? message

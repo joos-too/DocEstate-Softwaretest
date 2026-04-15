@@ -9,6 +9,10 @@ import type { Property, PropertyFormValues, PropertyPayload } from '../types/pro
 
 const EMPTY_FORM: PropertyFormValues = {
   name: '',
+  objectType: '',
+  constructionYear: '',
+  lotSize: '',
+  livingSpace: '',
   address: {
     city: '',
     postalCode: '',
@@ -20,6 +24,10 @@ const EMPTY_FORM: PropertyFormValues = {
 function mapPropertyToForm(property: Property): PropertyFormValues {
   return {
     name: property.name,
+    objectType: property.objectType,
+    constructionYear: property.constructionYear,
+    lotSize: String(property.lotSize),
+    livingSpace: String(property.livingSpace),
     address: {
       city: property.address.city,
       postalCode: property.address.postalCode,

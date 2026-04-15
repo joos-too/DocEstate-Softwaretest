@@ -6,10 +6,12 @@ import { DeleteModal } from '../components/DeleteModal';
 import { ErrorAlert } from '../components/ErrorAlert';
 import { LoadingState } from '../components/LoadingState';
 import type { Property } from '../types/property';
+import { formatArea } from '../utils/propertyFormat';
+import { getPropertyTypeLabel } from '../utils/propertyType';
 
 interface InfoRowProps {
   label: string;
-  value: string | number;
+  value: string;
 }
 
 function InfoRow({ label, value }: InfoRowProps) {
@@ -71,7 +73,7 @@ export function PropertyDetailPage() {
       navigate('/');
     } catch (requestError) {
       const message =
-        requestError instanceof Error ? requestError.message : 'Immobilie konnte nicht gelöscht werden.';
+        requestError instanceof Error ? requestError.message : 'Immobilie konnte nicht geloescht werden.';
       setError(message);
     } finally {
       setIsDeleting(false);
@@ -149,11 +151,10 @@ export function PropertyDetailPage() {
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            <InfoRow label="Bezeichnung" value={property.name} />
-            <InfoRow label="Ort" value={property.address.city} />
-            <InfoRow label="Postleitzahl" value={property.address.postalCode} />
-            <InfoRow label="Straße" value={property.address.street} />
-            <InfoRow label="Hausnummer" value={property.address.houseNumber} />
+            <InfoRow label="Objekttyp" value={getPropertyTypeLabel(property.objectType)} />
+            <InfoRow label="Baujahr" value={property.constructionYear} />
+            <InfoRow label="Grundstücksfläche" value={formatArea(property.lotSize)} />
+            <InfoRow label="Wohnfläche" value={formatArea(property.livingSpace)} />
           </div>
         </div>
       </section>

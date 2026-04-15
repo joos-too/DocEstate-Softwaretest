@@ -3,6 +3,8 @@ package de.docestate.softwaretest.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,11 +27,35 @@ public class Property {
     @Column(nullable = false)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PropertyType objectType;
+
+    @Column(nullable = false)
+    private String constructionYear;
+
+    @Column(nullable = false)
+    private Float lotSize;
+
+    @Column(nullable = false)
+    private Float livingSpace;
+
     @Embedded
     private Address address;
 
-    public void update(String name, Address address) {
+    public void update(
+            String name,
+            PropertyType objectType,
+            String constructionYear,
+            Float lotSize,
+            Float livingSpace,
+            Address address
+    ) {
         this.name = name;
+        this.objectType = objectType;
+        this.constructionYear = constructionYear;
+        this.lotSize = lotSize;
+        this.livingSpace = livingSpace;
         this.address = address;
     }
 }

@@ -56,6 +56,10 @@ class SoftwaretestApplicationTests {
         String requestBody = """
                 {
                   "name": "Haus Lengsdorf",
+                  "objectType": "EINFAMILIENHAUS",
+                  "constructionYear": "1998",
+                  "lotSize": 450.5,
+                  "livingSpace": 132.75,
                   "address": {
                     "city": "Bonn",
                     "postalCode": "53127",
@@ -72,6 +76,8 @@ class SoftwaretestApplicationTests {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Haus Lengsdorf"))
+                .andExpect(jsonPath("$.objectType").value("EINFAMILIENHAUS"))
+                .andExpect(jsonPath("$.constructionYear").value("1998"))
                 .andExpect(jsonPath("$.address.city").value("Bonn"));
 
         mockMvc.perform(get("/api/properties")
@@ -86,10 +92,14 @@ class SoftwaretestApplicationTests {
         String requestBody = """
                 {
                   "name": "Stadtwohnung",
+                  "objectType": "EIGENTUMSWOHNUNG",
+                  "constructionYear": "2008",
+                  "lotSize": 120.0,
+                  "livingSpace": 84.5,
                   "address": {
                     "city": "Berlin",
                     "postalCode": "10117",
-                    "street": "Friedrichstrasse",
+                    "street": "Friedrichstraße",
                     "houseNumber": "100"
                   }
                 }
@@ -109,6 +119,8 @@ class SoftwaretestApplicationTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("Stadtwohnung"))
+                .andExpect(jsonPath("$.objectType").value("EIGENTUMSWOHNUNG"))
+                .andExpect(jsonPath("$.constructionYear").value("2008"))
                 .andExpect(jsonPath("$.address.city").value("Berlin"));
     }
 
@@ -117,6 +129,10 @@ class SoftwaretestApplicationTests {
         String createBody = """
                 {
                   "name": "Altbau",
+                  "objectType": "MEHRFAMILIENHAUS",
+                  "constructionYear": "1974",
+                  "lotSize": 310.0,
+                  "livingSpace": 210.0,
                   "address": {
                     "city": "Hamburg",
                     "postalCode": "20095",
@@ -137,6 +153,10 @@ class SoftwaretestApplicationTests {
         String updateBody = """
                 {
                   "name": "Modernisierter Altbau",
+                  "objectType": "DOPPELHAUSHAELFTE",
+                  "constructionYear": "1980",
+                  "lotSize": 333.3,
+                  "livingSpace": 215.5,
                   "address": {
                     "city": "Hamburg",
                     "postalCode": "20095",
@@ -149,9 +169,13 @@ class SoftwaretestApplicationTests {
         mockMvc.perform(put("/api/properties/" + id)
                         .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updateBody))
+                .content(updateBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Modernisierter Altbau"))
+                .andExpect(jsonPath("$.objectType").value("DOPPELHAUSHAELFTE"))
+                .andExpect(jsonPath("$.constructionYear").value("1980"))
+                .andExpect(jsonPath("$.lotSize").value(333.3))
+                .andExpect(jsonPath("$.livingSpace").value(215.5))
                 .andExpect(jsonPath("$.address.street").value("Neuer Weg"));
     }
 
@@ -160,6 +184,10 @@ class SoftwaretestApplicationTests {
         String createBody = """
                 {
                   "name": "Reihenhaus",
+                  "objectType": "DOPPELHAUSHAELFTE",
+                  "constructionYear": "2001",
+                  "lotSize": 240.0,
+                  "livingSpace": 145.0,
                   "address": {
                     "city": "Koeln",
                     "postalCode": "50667",
@@ -179,6 +207,7 @@ class SoftwaretestApplicationTests {
 
         String partialUpdateBody = """
                 {
+                  "livingSpace": 150.5,
                   "address": {
                     "street": "Trankgasse"
                   }
@@ -191,6 +220,10 @@ class SoftwaretestApplicationTests {
                         .content(partialUpdateBody))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Reihenhaus"))
+                .andExpect(jsonPath("$.objectType").value("DOPPELHAUSHAELFTE"))
+                .andExpect(jsonPath("$.constructionYear").value("2001"))
+                .andExpect(jsonPath("$.lotSize").value(240.0))
+                .andExpect(jsonPath("$.livingSpace").value(150.5))
                 .andExpect(jsonPath("$.address.city").value("Koeln"))
                 .andExpect(jsonPath("$.address.postalCode").value("50667"))
                 .andExpect(jsonPath("$.address.street").value("Trankgasse"))
@@ -202,6 +235,10 @@ class SoftwaretestApplicationTests {
         String createBody = """
                 {
                   "name": "Einfamilienhaus",
+                  "objectType": "EINFAMILIENHAUS",
+                  "constructionYear": "1995",
+                  "lotSize": 500.0,
+                  "livingSpace": 180.0,
                   "address": {
                     "city": "Leipzig",
                     "postalCode": "04109",
@@ -234,6 +271,10 @@ class SoftwaretestApplicationTests {
         String requestBody = """
                 {
                   "name": "Testobjekt",
+                  "objectType": "EINFAMILIENHAUS",
+                  "constructionYear": "2010",
+                  "lotSize": 220.0,
+                  "livingSpace": 98.5,
                   "address": {
                     "city": "Bonn",
                     "postalCode": "5312",

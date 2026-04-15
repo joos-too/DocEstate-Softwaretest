@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "spring.jpa.hibernate.ddl-auto=create-drop"
 })
 class SoftwaretestApplicationTests {
+
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "admin123";
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,6 +46,12 @@ class SoftwaretestApplicationTests {
     }
 
     @Test
+    void unauthenticatedRequestsAreRejected() throws Exception {
+        mockMvc.perform(get("/api/properties"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void propertyReadAndWriteTest() throws Exception {
         String requestBody = """
                 {
@@ -56,6 +66,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated())
@@ -63,7 +74,8 @@ class SoftwaretestApplicationTests {
                 .andExpect(jsonPath("$.name").value("Haus Lengsdorf"))
                 .andExpect(jsonPath("$.address.city").value("Bonn"));
 
-        mockMvc.perform(get("/api/properties"))
+        mockMvc.perform(get("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].name").value("Haus Lengsdorf"));
@@ -84,13 +96,15 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isCreated());
 
         Long id = propertyRepository.findAll().get(0).getId();
 
-        mockMvc.perform(get("/api/properties/" + id))
+        mockMvc.perform(get("/api/properties/" + id)
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(id))
@@ -113,6 +127,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
@@ -132,6 +147,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(put("/api/properties/" + id)
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateBody))
                 .andExpect(status().isOk())
@@ -154,6 +170,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
@@ -169,6 +186,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(put("/api/properties/" + id)
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(partialUpdateBody))
                 .andExpect(status().isOk())
@@ -194,16 +212,19 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(createBody))
                 .andExpect(status().isCreated());
 
         Long id = propertyRepository.findAll().get(0).getId();
 
-        mockMvc.perform(delete("/api/properties/" + id))
+        mockMvc.perform(delete("/api/properties/" + id)
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/api/properties"))
+        mockMvc.perform(get("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD)))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[]"));
     }
@@ -223,6 +244,7 @@ class SoftwaretestApplicationTests {
                 """;
 
         mockMvc.perform(post("/api/properties")
+                        .with(httpBasic(ADMIN_USERNAME, ADMIN_PASSWORD))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isBadRequest())

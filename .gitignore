@@ -1,8 +1,8 @@
 HELP.md
 target/
 data/
-src/resources/static/
 .mvn/wrapper/maven-wrapper.jar
+src/main/resources/static/
 !**/src/main/**/target/
 !**/src/test/**/target/
 

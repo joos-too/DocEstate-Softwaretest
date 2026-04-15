@@ -1,5 +1,5 @@
 import { type KeyboardEvent, type MouseEvent } from 'react';
-import { FiEdit2, FiTrash2 } from 'react-icons/fi';
+import {FiEdit2, FiMapPin, FiTrash2} from 'react-icons/fi';
 import type { Property } from '../types/property';
 import { getPropertyTypeLabel } from '../utils/propertyType';
 
@@ -11,6 +11,7 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, onDelete, onEdit, onOpen }: PropertyCardProps) {
+  const address = property.address;
   function handleAction(event: MouseEvent<HTMLButtonElement>, action: (property: Property) => void) {
     event.stopPropagation();
     action(property);
@@ -41,6 +42,20 @@ export function PropertyCard({ property, onDelete, onEdit, onOpen }: PropertyCar
             <span className="rounded-full bg-stone-100 px-3 py-1 font-semibold text-ink">
               Baujahr {property.constructionYear}
             </span>
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-start gap-3 rounded-2xl bg-stone-50 px-4 py-4">
+          <div className="rounded-full bg-accentSoft p-2 text-accent">
+            <FiMapPin size={16} />
+          </div>
+          <div className="text-sm text-stone-600">
+            <p className="font-semibold text-ink">
+              {address.street} {address.houseNumber}
+            </p>
+            <p className="mt-1">
+              {address.postalCode} {address.city}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">

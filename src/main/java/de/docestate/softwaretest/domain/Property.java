@@ -32,7 +32,7 @@ public class Property {
     private PropertyType objectType;
 
     @Column(nullable = false)
-    private String constructionYear;
+    private Integer constructionYear;
 
     @Column(nullable = false)
     private Float lotSize;
@@ -46,7 +46,7 @@ public class Property {
     public void update(
             String name,
             PropertyType objectType,
-            String constructionYear,
+            Integer constructionYear,
             Float lotSize,
             Float livingSpace,
             Address address

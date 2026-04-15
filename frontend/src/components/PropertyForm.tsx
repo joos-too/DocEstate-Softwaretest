@@ -39,6 +39,10 @@ function parseFloatValue(value: string) {
   return Number.parseFloat(value.replace(',', '.'));
 }
 
+function parseIntegerValue(value: string) {
+  return Number.parseInt(value, 10);
+}
+
 function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyPayload {
   if (mode === 'edit') {
     const payload: PropertyPayload = {};
@@ -53,7 +57,7 @@ function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyP
     }
 
     if (values.constructionYear.trim()) {
-      payload.constructionYear = values.constructionYear.trim();
+      payload.constructionYear = parseIntegerValue(values.constructionYear.trim());
     }
 
     if (values.lotSize.trim()) {
@@ -90,7 +94,7 @@ function toRequestPayload(values: PropertyFormValues, mode: FormMode): PropertyP
   return {
     name: values.name.trim(),
     objectType: values.objectType as PropertyType,
-    constructionYear: values.constructionYear.trim(),
+    constructionYear: parseIntegerValue(values.constructionYear.trim()),
     lotSize: parseFloatValue(values.lotSize.trim()),
     livingSpace: parseFloatValue(values.livingSpace.trim()),
     address: {
@@ -421,7 +425,7 @@ export function PropertyForm({
               value={values.address.street}
               onChange={handleInputChange('address.street')}
               className={getInputClassName('address.street')}
-              placeholder="Musterweg"
+              placeholder="Zur Marterkapelle"
             />
             {getFieldError('address.street') ? (
               <span className="mt-2 block text-sm font-medium text-rose-700">

@@ -12,7 +12,7 @@ export function Layout() {
                 Immobilienverwaltung
               </h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-stone-600 sm:text-base">
-                Minimalistische Oberfläche für Anlegen, Anzeigen, Bearbeiten und Löschen von Immobilien.
+                Einfache Oberfläche zum Anlegen, Anzeigen, Bearbeiten und Löschen von Wohnimmobilien.
               </p>
             </div>
           </div>

@@ -46,7 +46,7 @@ public class PropertyService {
         Address mergedAddress = PropertyMapper.mergeAddress(property.getAddress(), request.address());
         String mergedName = request.name() != null ? request.name() : property.getName();
         var mergedObjectType = request.objectType() != null ? request.objectType() : property.getObjectType();
-        String mergedConstructionYear = request.constructionYear() != null
+        Integer mergedConstructionYear = request.constructionYear() != null
                 ? request.constructionYear()
                 : property.getConstructionYear();
         Float mergedLotSize = request.lotSize() != null ? request.lotSize() : property.getLotSize();

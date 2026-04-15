@@ -25,7 +25,7 @@ function mapPropertyToForm(property: Property): PropertyFormValues {
   return {
     name: property.name,
     objectType: property.objectType,
-    constructionYear: property.constructionYear,
+    constructionYear: String(property.constructionYear),
     lotSize: String(property.lotSize),
     livingSpace: String(property.livingSpace),
     address: {

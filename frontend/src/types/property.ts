@@ -15,7 +15,7 @@ export interface Property {
   id: number;
   name: string;
   objectType: PropertyType;
-  constructionYear: string;
+  constructionYear: number;
   lotSize: number;
   livingSpace: number;
   address: Address;
@@ -24,7 +24,7 @@ export interface Property {
 export interface PropertyPayload {
   name?: string;
   objectType?: PropertyType;
-  constructionYear?: string;
+  constructionYear?: number;
   lotSize?: number;
   livingSpace?: number;
   address?: Partial<Address>;

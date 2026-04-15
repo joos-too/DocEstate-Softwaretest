@@ -21,9 +21,9 @@ function localizeFieldErrors(fieldErrors?: Record<string, string>) {
   }
 
   return Object.fromEntries(
-    Object.entries(fieldErrors).map(([field, message]) => [
+    Object.entries(fieldErrors).map(([field]) => [
       field,
-      FIELD_ERROR_TRANSLATIONS[field] ?? localizeMessage(message)
+      FIELD_ERROR_TRANSLATIONS[field]
     ])
   );
 }
@@ -41,20 +41,10 @@ function localizeMessage(message?: string) {
   return (
     {
       'Request is invalid.': 'Anfrage ist ungültig.',
-      'Name is invalid.': 'Bezeichnung ist ungültig.',
-      'Object type is invalid.': 'Objekttyp ist ungültig.',
-      'Construction year is invalid.': 'Baujahr ist ungültig.',
       'Construction year must contain digits only.': 'Baujahr darf nur aus Ziffern bestehen.',
-      'Lot size is invalid.': 'Grundstücksfläche ist ungültig.',
       'Lot size must be greater than 0.': 'Grundstücksfläche muss größer als 0 sein.',
-      'Living space is invalid.': 'Wohnfläche ist ungültig.',
       'Living space must be greater than 0.': 'Wohnfläche muss größer als 0 sein.',
-      'Address is invalid.': 'Adresse ist ungültig.',
-      'City is invalid.': 'Ort ist ungültig.',
-      'Postal code is invalid.': 'Postleitzahl ist ungültig.',
       'Postal code must contain exactly 5 digits.': 'Postleitzahl muss genau 5 Ziffern haben.',
-      'Street is invalid.': 'Straße ist ungültig.',
-      'House number is invalid.': 'Hausnummer ist ungültig.'
     }[message] ?? message
   );
 }

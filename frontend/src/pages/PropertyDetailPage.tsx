@@ -152,7 +152,7 @@ export function PropertyDetailPage() {
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
             <InfoRow label="Objekttyp" value={getPropertyTypeLabel(property.objectType)} />
-            <InfoRow label="Baujahr" value={property.constructionYear} />
+            <InfoRow label="Baujahr" value={String(property.constructionYear)} />
             <InfoRow label="Grundstücksfläche" value={formatArea(property.lotSize)} />
             <InfoRow label="Wohnfläche" value={formatArea(property.livingSpace)} />
           </div>

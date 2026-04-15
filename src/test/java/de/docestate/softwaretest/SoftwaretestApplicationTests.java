@@ -57,7 +57,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Haus Lengsdorf",
                   "objectType": "EINFAMILIENHAUS",
-                  "constructionYear": "1998",
+                  "constructionYear": 1998,
                   "lotSize": 450.5,
                   "livingSpace": 132.75,
                   "address": {
@@ -77,7 +77,7 @@ class SoftwaretestApplicationTests {
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Haus Lengsdorf"))
                 .andExpect(jsonPath("$.objectType").value("EINFAMILIENHAUS"))
-                .andExpect(jsonPath("$.constructionYear").value("1998"))
+                .andExpect(jsonPath("$.constructionYear").value(1998))
                 .andExpect(jsonPath("$.address.city").value("Bonn"));
 
         mockMvc.perform(get("/api/properties")
@@ -93,7 +93,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Stadtwohnung",
                   "objectType": "EIGENTUMSWOHNUNG",
-                  "constructionYear": "2008",
+                  "constructionYear": 2008,
                   "lotSize": 120.0,
                   "livingSpace": 84.5,
                   "address": {
@@ -120,7 +120,7 @@ class SoftwaretestApplicationTests {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("Stadtwohnung"))
                 .andExpect(jsonPath("$.objectType").value("EIGENTUMSWOHNUNG"))
-                .andExpect(jsonPath("$.constructionYear").value("2008"))
+                .andExpect(jsonPath("$.constructionYear").value(2008))
                 .andExpect(jsonPath("$.address.city").value("Berlin"));
     }
 
@@ -130,7 +130,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Altbau",
                   "objectType": "MEHRFAMILIENHAUS",
-                  "constructionYear": "1974",
+                  "constructionYear": 1974,
                   "lotSize": 310.0,
                   "livingSpace": 210.0,
                   "address": {
@@ -154,7 +154,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Modernisierter Altbau",
                   "objectType": "DOPPELHAUSHAELFTE",
-                  "constructionYear": "1980",
+                  "constructionYear": 1980,
                   "lotSize": 333.3,
                   "livingSpace": 215.5,
                   "address": {
@@ -173,7 +173,7 @@ class SoftwaretestApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Modernisierter Altbau"))
                 .andExpect(jsonPath("$.objectType").value("DOPPELHAUSHAELFTE"))
-                .andExpect(jsonPath("$.constructionYear").value("1980"))
+                .andExpect(jsonPath("$.constructionYear").value(1980))
                 .andExpect(jsonPath("$.lotSize").value(333.3))
                 .andExpect(jsonPath("$.livingSpace").value(215.5))
                 .andExpect(jsonPath("$.address.street").value("Neuer Weg"));
@@ -185,7 +185,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Reihenhaus",
                   "objectType": "DOPPELHAUSHAELFTE",
-                  "constructionYear": "2001",
+                  "constructionYear": 2001,
                   "lotSize": 240.0,
                   "livingSpace": 145.0,
                   "address": {
@@ -221,7 +221,7 @@ class SoftwaretestApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Reihenhaus"))
                 .andExpect(jsonPath("$.objectType").value("DOPPELHAUSHAELFTE"))
-                .andExpect(jsonPath("$.constructionYear").value("2001"))
+                .andExpect(jsonPath("$.constructionYear").value(2001))
                 .andExpect(jsonPath("$.lotSize").value(240.0))
                 .andExpect(jsonPath("$.livingSpace").value(150.5))
                 .andExpect(jsonPath("$.address.city").value("Koeln"))
@@ -236,7 +236,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Einfamilienhaus",
                   "objectType": "EINFAMILIENHAUS",
-                  "constructionYear": "1995",
+                  "constructionYear": 1995,
                   "lotSize": 500.0,
                   "livingSpace": 180.0,
                   "address": {
@@ -272,7 +272,7 @@ class SoftwaretestApplicationTests {
                 {
                   "name": "Testobjekt",
                   "objectType": "EINFAMILIENHAUS",
-                  "constructionYear": "2010",
+                  "constructionYear": 2010,
                   "lotSize": 220.0,
                   "livingSpace": 98.5,
                   "address": {

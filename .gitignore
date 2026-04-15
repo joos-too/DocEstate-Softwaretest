@@ -2,6 +2,7 @@ HELP.md
 target/
 data/
 .mvn/wrapper/maven-wrapper.jar
+.m2
 src/main/resources/static/
 !**/src/main/**/target/
 !**/src/test/**/target/

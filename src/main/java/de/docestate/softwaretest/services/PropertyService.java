@@ -1,4 +1,4 @@
-package de.docestate.softwaretest.utils;
+package de.docestate.softwaretest.services;
 
 import de.docestate.softwaretest.dto.request.PropertyRequest;
 import de.docestate.softwaretest.dto.response.PropertyResponse;
@@ -7,6 +7,9 @@ import de.docestate.softwaretest.domain.Address;
 import de.docestate.softwaretest.domain.Property;
 import de.docestate.softwaretest.repos.PropertyRepository;
 import java.util.List;
+
+import de.docestate.softwaretest.utils.PropertyMapper;
+import de.docestate.softwaretest.utils.PropertyNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;

@@ -3,7 +3,7 @@ package de.docestate.softwaretest.controller;
 import de.docestate.softwaretest.dto.request.PropertyRequest;
 import de.docestate.softwaretest.dto.request.PropertyUpdateRequest;
 import de.docestate.softwaretest.dto.response.PropertyResponse;
-import de.docestate.softwaretest.utils.PropertyService;
+import de.docestate.softwaretest.repos.PropertyRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/properties")
 public class PropertyController {
 
-    private final PropertyService propertyService;
+    private final PropertyRepository.PropertyService propertyService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
